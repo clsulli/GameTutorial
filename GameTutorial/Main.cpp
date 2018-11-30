@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Engine/Engine.h"
+#include "Engine/Graphics/Sprite.h"
 
 using namespace std;
 
@@ -8,11 +9,16 @@ int main() {
 	
 	Engine engine;
 	engine.Initialize("Game Tutorial");
+
+	Sprite testSprite = Sprite("Assets/Art/flappy.png", 100, 100);
 	
 	while (true)
 	{
 		engine.Update();
-		engine.Render();
+		testSprite.Update();
+		engine.BeginRender();
+		testSprite.Render();
+		engine.EndRender();
 	}
 
 

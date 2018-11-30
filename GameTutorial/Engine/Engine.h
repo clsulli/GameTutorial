@@ -26,7 +26,8 @@ public:
 	// Update state of the game.
 	void Update();
 	// Render the state of teh game.
-	void Render();
+	void BeginRender();
+	void EndRender();
 
 private:
 	// Pointer to GLFW Window.
