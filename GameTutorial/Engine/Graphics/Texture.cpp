@@ -21,13 +21,22 @@ Texture::Texture(int _id)
 
 Texture::Texture(string path)
 {
-	this->id = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MULTIPLY_ALPHA);
+	this->id = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MULTIPLY_ALPHA | SOIL_FLAG_INVERT_Y);
 	if (!GetTextureParams())
 	{
 		cout << "Error loading image: " << path << endl;
 	}
 }
 
+void Texture::Cycle(string path)
+{
+	/*cout << path << endl;*/
+	this->id = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MULTIPLY_ALPHA | SOIL_FLAG_INVERT_Y);
+	if (!GetTextureParams())
+	{
+		cout << "Error loading image: " << path << endl;
+	}
+}
 
 int Texture::GetID()
 {

@@ -16,6 +16,8 @@ public:
 	Texture(string path);
 	~Texture();
 
+	void Cycle(string path);
+
 	int GetID();
 	int GetWidth();
 	int GetHeight();
