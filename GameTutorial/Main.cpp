@@ -13,28 +13,23 @@ int main() {
 	Engine engine;
 	engine.Initialize("Game Tutorial");
 
-	Sprite testSprite = Sprite("Assets/Art/spritesheet.png", 0, 0, 9);
-	testSprite.SetScale(0.25f);
+	Sprite testSprite = Sprite("Assets/Art/spritesheet.png", 3, 3, 8);
+	testSprite.SetScale(0.025f);
 	int x = 0;
 	while (true)
 	{
 		x++;
 		engine.Update();
-		if (x == 20)
-		{
-			testSprite.Update();
-			testSprite.Render();
-		}
 		
 
 		if (Keyboard::Key(GLFW_KEY_G))
 		{
-			testSprite.RotateBy(100);
+			testSprite.SpriteNextFrame();
 		}
 
 		if (Keyboard::Key(GLFW_KEY_H))
 		{
-			testSprite.RotateBy(-100);
+		
 		}
 
 		if (Mouse::Button(GLFW_MOUSE_BUTTON_MIDDLE))
@@ -63,6 +58,11 @@ int main() {
 		}
 
 		engine.BeginRender();
+		testSprite.Render();
+		if (x % 7 == 0)
+		{
+			testSprite.SpriteNextFrame();
+		}
 		engine.EndRender();
 	}
 

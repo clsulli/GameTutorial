@@ -13,14 +13,15 @@ class Sprite
 public:
 	~Sprite();
 	Sprite();
-	Sprite(string imagePath, int numFrames);
-	Sprite(string imagePath, float _xPos, float _yPos, int _numFrames);
+	Sprite(string imagePath, int _spritesheetWidth, int _spritesheetHeight, int _spritesheetFrames);
+	Sprite(string imagePath, float _xPos, float _yPos, int _spritesheetWidth, int _spritesheetHeight, int _spritesheetFrames);
 	
 	void Update();
 	void Render();
 
+	void SpriteNextFrame();
 	void DetermineState();
-
+	
 	void SpeedTo(float x);
 	void SpeedBy(float x);
 
@@ -54,7 +55,6 @@ private:
 	float yScale;
 
 	int numFrames;
-	int currFrame;
 };
 
 #endif

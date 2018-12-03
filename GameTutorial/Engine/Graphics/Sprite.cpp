@@ -1,6 +1,7 @@
 #include "Sprite.h"
 #include "../Engine.h"
 
+
 string animationSequence[] = { "Art/Assets/frame-1.png", "Art/Assets/frame-2.png" , "Art/Assets/frame-3.png" , "Art/Assets/frame-4.png" , "Art/Assets/frame-5.png" , "Art/Assets/frame-6.png"  ,"Art/Assets/frame-7.png", "Art/Assets/frame-8.png" };
 
 
@@ -10,40 +11,37 @@ Sprite::~Sprite()
 
 Sprite::Sprite()
 {
-	this->xPos = 0;
-	this->yPos = 0;
-	this->rot = 10;
-	this->speed = 100;
 	this->texture = Texture();
-}
-
-Sprite::Sprite(string imagePath, int numFrames)
-{
-	this->texture = Texture(imagePath);
-	this->spritesheet = SpriteSheet(numFrames);
 	this->xPos = 0;
 	this->yPos = 0;
 	this->rot = 0;
-	this->speed = 100;
-
+	this->speed = 250;
 }
 
-Sprite::Sprite(string imagePath, float _xPos, float _yPos, int numFrames)
+Sprite::Sprite(string imagePath, int _spritesheetHeight, int _spritesheetWidth, int _spritesheetFrames)
 {
 	this->texture = Texture(imagePath);
-	this->spritesheet = SpriteSheet(numFrames);
-	this->currFrame = 4;
-	this->numFrames = 9;
+	this->spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
+	this->xPos = 0;
+	this->yPos = 0;
+	this->rot = 0;
+	this->speed = 250;
+}
+
+Sprite::Sprite(string imagePath, float _xPos, float _yPos, int _spritesheetHeight, int _spritesheetWidth, int _spritesheetFrames)
+{
+	this->texture = Texture(imagePath);
+	this->spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
 	this->xPos = _xPos;
 	this->yPos = _yPos;
 	this->rot = 0;
-	this->speed = 100;
+	this->speed = 250;
 }
 
 
 void Sprite::Update()
 {
-	this->currFrame = 1;
+	
 }
 
 void Sprite::Render()
@@ -67,25 +65,28 @@ void Sprite::Render()
 
 }
 
+void Sprite::SpriteNextFrame()
+{
+	this->spritesheet.NextFrame();
+	this->spritesheet.SetFrame();
+}
+
 void Sprite::DetermineState()
 {
-	float xOff = 0.33f;
-	float height = ceil((double)this->numFrames/3.0);
-	float yOff = 1.0 / height;
+	pair <float, float> TL = this->spritesheet.GetFrameTL();
+	pair <float, float> BL = this->spritesheet.GetFrameBL();
+	pair <float, float> TR = this->spritesheet.GetFrameTR();
+	pair <float, float> BR = this->spritesheet.GetFrameBR();
 
-	float xandOff = xOff * -1 + xOff * (this->currFrame % 3);
-	float yandOff = yOff * -1 + yOff * (this->currFrame % (int)height);
-	float xnoOff = xOff * (this->currFrame % 3);
-	float ynoOff = yOff * (this->currFrame % (int)height);
+	glTexCoord2f(BL.first, BL.second); glVertex2f(0, 0);
+	/*cout << "BL: " << BL.first << " " << BL.second << endl;*/
+	glTexCoord2f(BR.first, BR.second); glVertex2f(this->texture.GetWidth(), 0);
+	/*cout << "BR: " << BR.first << " " << BR.second << endl;*/
+	glTexCoord2f(TR.first, TR.second); glVertex2f(this->texture.GetWidth(), this->texture.GetHeight());
+	/*cout << "TR: " << TR.first << " " << TR.second << endl;*/
+	glTexCoord2f(TL.first,  TL.second);	glVertex2f(0, this->texture.GetHeight());
+	/*cout << "TL: " << TL.first << " " << TL.second << endl;*/
 
-	glTexCoord2f( xandOff, yandOff); glVertex2f(0, 0);
-	cout << "BL: " << xandOff << " " << yandOff << endl;
-	glTexCoord2f(xnoOff, yandOff); glVertex2f(this->texture.GetWidth(), 0);
-	cout << "BR: " << xnoOff << " " << yandOff << endl;
-	glTexCoord2f(xnoOff, ynoOff); glVertex2f(this->texture.GetWidth(), this->texture.GetHeight());
-	cout << "TR: " << xnoOff << " " << ynoOff << endl;
-	glTexCoord2f(xandOff,  ynoOff);	glVertex2f(0, this->texture.GetHeight());
-	cout << "TL: " << xandOff << " " << ynoOff << endl;
 }
 
 
