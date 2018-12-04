@@ -1,41 +1,40 @@
 #include "Sprite.h"
 #include "../Engine.h"
 
-
-string animationSequence[] = { "Art/Assets/frame-1.png", "Art/Assets/frame-2.png" , "Art/Assets/frame-3.png" , "Art/Assets/frame-4.png" , "Art/Assets/frame-5.png" , "Art/Assets/frame-6.png"  ,"Art/Assets/frame-7.png", "Art/Assets/frame-8.png" };
-
-
 Sprite::~Sprite()
 {
 }
 
 Sprite::Sprite()
 {
-	this->texture = Texture();
-	this->xPos = 0;
-	this->yPos = 0;
-	this->rot = 0;
-	this->speed = 250;
+	texture = Texture();
+	pos = Vector3(0);
+	rot = 0;
+	speed = 250;
+	scale = Vector3(1);
+	size = Vector3(0);
 }
 
 Sprite::Sprite(string imagePath, int _spritesheetHeight, int _spritesheetWidth, int _spritesheetFrames)
 {
-	this->texture = Texture(imagePath);
-	this->spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
-	this->xPos = 0;
-	this->yPos = 0;
-	this->rot = 0;
-	this->speed = 250;
+	texture = Texture(imagePath);
+	spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
+	pos = Vector3(0);
+	rot = 0;
+	speed = 250;
+	scale = Vector3(1);
+	size = Vector3((float)texture.GetWidth(), (float)texture.GetWidth(), 1);
 }
 
-Sprite::Sprite(string imagePath, float _xPos, float _yPos, int _spritesheetHeight, int _spritesheetWidth, int _spritesheetFrames)
+Sprite::Sprite(string imagePath, Vector3 _v, int _spritesheetHeight, int _spritesheetWidth, int _spritesheetFrames)
 {
-	this->texture = Texture(imagePath);
-	this->spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
-	this->xPos = _xPos;
-	this->yPos = _yPos;
-	this->rot = 0;
-	this->speed = 250;
+	texture = Texture(imagePath);
+	spritesheet = SpriteSheet(_spritesheetWidth, _spritesheetHeight, _spritesheetFrames);
+	pos = _v;
+	rot = 0;
+	speed = 250;
+	scale = Vector3(1);
+	size = Vector3((float)texture.GetWidth(), (float)texture.GetWidth(), 1);
 }
 
 
@@ -51,14 +50,14 @@ void Sprite::Render()
 	glLoadIdentity();
 
 	// TRANSLATE -> ROTATE -> SCALE
-	glTranslatef(this->xPos, this->yPos, 0);
-	glRotatef(this->rot, 0, 0, 1);
-	glScalef(this->xScale, this->yScale, 1);
+	glTranslatef(pos.x, pos.y, 0);
+	glRotatef(rot, 0, 0, 1);
+	glScalef(scale.x, scale.y, 1);
 
 	// Rendering
 	glColor4f(1, 1, 1, 1);
 	glBegin(GL_QUADS);
-	this->DetermineState();
+	DetermineState();
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -67,24 +66,24 @@ void Sprite::Render()
 
 void Sprite::SpriteNextFrame()
 {
-	this->spritesheet.NextFrame();
-	this->spritesheet.SetFrame();
+	spritesheet.NextFrame();
+	spritesheet.SetFrame();
 }
 
 void Sprite::DetermineState()
 {
-	pair <float, float> TL = this->spritesheet.GetFrameTL();
-	pair <float, float> BL = this->spritesheet.GetFrameBL();
-	pair <float, float> TR = this->spritesheet.GetFrameTR();
-	pair <float, float> BR = this->spritesheet.GetFrameBR();
+	pair <float, float> TL = spritesheet.GetFrameTL();
+	pair <float, float> BL = spritesheet.GetFrameBL();
+	pair <float, float> TR = spritesheet.GetFrameTR();
+	pair <float, float> BR = spritesheet.GetFrameBR();
 
-	glTexCoord2f(BL.first, BL.second); glVertex2f(0, 0);
+	glTexCoord2f(BL.first, BL.second); glVertex2i(0, 0);
 	/*cout << "BL: " << BL.first << " " << BL.second << endl;*/
-	glTexCoord2f(BR.first, BR.second); glVertex2f(this->texture.GetWidth(), 0);
+	glTexCoord2f(BR.first, BR.second); glVertex2i(texture.GetWidth(), 0);
 	/*cout << "BR: " << BR.first << " " << BR.second << endl;*/
-	glTexCoord2f(TR.first, TR.second); glVertex2f(this->texture.GetWidth(), this->texture.GetHeight());
+	glTexCoord2f(TR.first, TR.second); glVertex2i(texture.GetWidth(), texture.GetHeight());
 	/*cout << "TR: " << TR.first << " " << TR.second << endl;*/
-	glTexCoord2f(TL.first,  TL.second);	glVertex2f(0, this->texture.GetHeight());
+	glTexCoord2f(TL.first,  TL.second);	glVertex2i(0, texture.GetHeight());
 	/*cout << "TL: " << TL.first << " " << TL.second << endl;*/
 
 }
@@ -92,63 +91,79 @@ void Sprite::DetermineState()
 
 void Sprite::SpeedTo(float x)
 {
-	this->speed = x;
+	speed = x;
 }
 
 void Sprite::SpeedBy(float x)
 {
-	this->speed += x;
+	speed += x;
 }
 
-void Sprite::MoveTo(float x, float y)
+void Sprite::MoveTo(Vector3 v)
 {
-	this->xPos = x;
-	this->yPos = y;
+	pos = v;
 }
 
-void Sprite::MoveBy(float x, float y)
+void Sprite::MoveBy(Vector3 v)
 {
-	this->xPos += (x * Engine::GetDT());
-	this->yPos += (y * Engine::GetDT());
+	pos = pos + (v * Engine::GetDT());
 }
 
 void Sprite::MoveLeft()
 {
-	this->xPos -= (speed * Engine::GetDT());
+	pos = pos - Vector3((speed*Engine::GetDT()), 0, 0);
 }
 
 void Sprite::MoveRight()
 {
-	this->xPos += (speed * Engine::GetDT());
+	pos = pos + Vector3((speed*Engine::GetDT()), 0, 0);
 }
 
 void Sprite::MoveUp()
 {
-	this->yPos += (speed * Engine::GetDT());
+	pos = pos + Vector3(0, (speed*Engine::GetDT()), 0);
 }
 
 void Sprite::MoveDown()
 {
-	this->yPos -= (speed * Engine::GetDT());
+	pos = pos - Vector3(0, (speed*Engine::GetDT()), 0);
 }
 
 void Sprite::RotateTo(float x)
 {
-	this->rot = x;
+	rot = x;
 }
 void Sprite::RotateBy(float x)
 {
-	this->rot += (x * Engine::GetDT());
+	rot += (x * Engine::GetDT());
 }
 
 void Sprite::SetScale(float x)
 {
-	this->xScale = x;
-	this->yScale = x;
+	scale = Vector3(x);
 }
 
-void Sprite::SetScale(float x, float y)
+void Sprite::SetScale(Vector3 v)
 {
-	this->xScale = x;
-	this->yScale = y;
+	scale = v;
+}
+
+Vector3 * Sprite::GetPos()
+{
+	return &pos;
+}
+
+float * Sprite::GetRot()
+{
+	return &rot;
+}
+
+Vector3 * Sprite::GetScale()
+{
+	return &scale;
+}
+
+Vector3 * Sprite::GetSize()
+{
+	return &size;
 }

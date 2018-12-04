@@ -5,6 +5,8 @@
 #include "Engine/IO/Mouse.h"
 #include "Engine/IO/Keyboard.h"
 
+#include "FlappyBruh/Flapper.h"
+
 using namespace std;
 
 int main() {
@@ -13,8 +15,10 @@ int main() {
 	Engine engine;
 	engine.Initialize("Game Tutorial");
 
-	Sprite testSprite = Sprite("Assets/Art/spritesheet.png", 3, 3, 8);
+	Sprite testSprite = Sprite("Assets/Art/spritesheet.png", Vector3(100, 0, 0), 3, 3, 8);
 	testSprite.SetScale(0.025f);
+
+	Flapper player(testSprite);
 	int x = 0;
 	while (true)
 	{
@@ -24,44 +28,45 @@ int main() {
 
 		if (Keyboard::Key(GLFW_KEY_G))
 		{
-			testSprite.SpriteNextFrame();
+			player.GetSprite().RotateBy(100);
 		}
 
 		if (Keyboard::Key(GLFW_KEY_H))
 		{
-		
+			player.GetSprite().RotateBy(-100);
 		}
 
 		if (Mouse::Button(GLFW_MOUSE_BUTTON_MIDDLE))
 		{
-			testSprite.RotateBy(100);
+			player.GetSprite().RotateBy(100);
 		}
 
 		if (Keyboard::Key(GLFW_KEY_W))
 		{
-			testSprite.MoveUp();
+			player.GetRB().AddForce(Vector3(0, 0.5, 0));
 		}
 
 		if (Keyboard::Key(GLFW_KEY_S))
 		{
-			testSprite.MoveDown();
+			player.GetRB().AddForce(Vector3(0, -0.5, 0));
 		}
 
 		if (Keyboard::Key(GLFW_KEY_A))
 		{
-			testSprite.MoveLeft();
+			player.GetRB().AddForce(Vector3(-0.5, 0, 0));
 		}
 
 		if (Keyboard::Key(GLFW_KEY_D))
 		{
-			testSprite.MoveRight();
+			player.GetRB().AddForce(Vector3(0.5, 0, 0));
 		}
 
 		engine.BeginRender();
-		testSprite.Render();
+		player.Update();
+		player.Render();
 		if (x % 7 == 0)
 		{
-			testSprite.SpriteNextFrame();
+			player.GetSprite().SpriteNextFrame();
 		}
 		engine.EndRender();
 	}

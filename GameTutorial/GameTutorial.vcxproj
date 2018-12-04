@@ -119,11 +119,14 @@
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\IO\Keyboard.cpp" />
     <ClCompile Include="Engine\Graphics\Frame.cpp" />
+    <ClCompile Include="FlappyBruh\Flapper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Graphics\Texture.cpp" />
     <ClCompile Include="Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="Engine\IO\Mouse.cpp" />
     <ClCompile Include="Engine\Graphics\SpriteSheet.cpp" />
+    <ClCompile Include="Engine\Math\Vector3.cpp" />
+    <ClCompile Include="Engine\Physics\Rigidbody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h" />
@@ -133,6 +136,9 @@
     <ClInclude Include="Engine\IO\Keyboard.h" />
     <ClInclude Include="Engine\Graphics\SpriteSheet.h" />
     <ClInclude Include="Engine\Graphics\Frame.h" />
+    <ClInclude Include="Engine\Math\Vector3.h" />
+    <ClInclude Include="Engine\Physics\Rigidbody.h" />
+    <ClInclude Include="FlappyBruh\Flapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

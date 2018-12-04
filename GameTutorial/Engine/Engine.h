@@ -15,7 +15,7 @@ public:
 	// Screen width and height.
 	static int SCREEN_WIDTH;
 	static int SCREEN_HEIGHT;
-	static double GetDT();
+	static float GetDT();
 	
 	// Constructor and Deconstructor.
 	Engine();
@@ -33,8 +33,8 @@ public:
 private:
 	// Pointer to GLFW Window.
 	static GLFWwindow* window;
-	static double dt;
-	double lastTime;
+	static float dt;
+	float lastTime;
 };
 
 #endif

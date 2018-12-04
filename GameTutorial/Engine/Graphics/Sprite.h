@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "Texture.h"
 #include "SpriteSheet.h"
+#include "../Math/Vector3.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -14,7 +15,7 @@ public:
 	~Sprite();
 	Sprite();
 	Sprite(string imagePath, int _spritesheetWidth, int _spritesheetHeight, int _spritesheetFrames);
-	Sprite(string imagePath, float _xPos, float _yPos, int _spritesheetWidth, int _spritesheetHeight, int _spritesheetFrames);
+	Sprite(string imagePath, Vector3 _pos, int _spritesheetWidth, int _spritesheetHeight, int _spritesheetFrames);
 	
 	void Update();
 	void Render();
@@ -25,8 +26,8 @@ public:
 	void SpeedTo(float x);
 	void SpeedBy(float x);
 
-	void MoveTo(float x, float y);
-	void MoveBy(float x, float y);
+	void MoveTo(Vector3 v);
+	void MoveBy(Vector3 v);
 
 	void MoveLeft();
 	void MoveRight();
@@ -37,7 +38,12 @@ public:
 	void RotateBy(float x);
 
 	void SetScale(float x);
-	void SetScale(float x, float y);
+	void SetScale(Vector3 v);
+
+	Vector3* GetPos();
+	float* GetRot();
+	Vector3* GetScale();
+	Vector3* GetSize();
 
 private:
 	Texture texture;
@@ -45,16 +51,12 @@ private:
 
 	vector<int> frames;
 
-	float xPos;
-	float yPos;
+	Vector3 pos;
+	Vector3 scale;
+	Vector3 size;
 
 	float speed;
 	float rot;
-
-	float xScale;
-	float yScale;
-
-	int numFrames;
 };
 
 #endif
