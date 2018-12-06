@@ -43,7 +43,7 @@ int main() {
 
 		if (Keyboard::Key(GLFW_KEY_W))
 		{
-			player.GetRB().AddForce(Vector3(0, 0.5, 0));
+			player.Jump();
 		}
 
 		if (Keyboard::Key(GLFW_KEY_S))

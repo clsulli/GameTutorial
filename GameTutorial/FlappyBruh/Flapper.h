@@ -14,6 +14,8 @@ public:
 	void Update();
 	void Render();
 
+	void Jump();
+
 	Sprite& GetSprite();
 	Rigidbody& GetRB();
 

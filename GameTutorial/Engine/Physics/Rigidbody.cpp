@@ -56,6 +56,11 @@ void Rigidbody::AddForce(Vector3 f)
 	vel = vel + f;
 }
 
+void Rigidbody::ResetVel()
+{
+	vel = 0;
+}
+
 
 Rigidbody::~Rigidbody()
 {

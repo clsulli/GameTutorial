@@ -15,6 +15,7 @@ public:
 	void Render(Vector3 c);
 	
 	void AddForce(Vector3 f);
+	void ResetVel();
 
 private:
 	Vector3* pos;
